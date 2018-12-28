@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Economist Reader</title>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript">
+		proxy_url = "https://cors-anywhere.herokuapp.com/";
+		test_url = "https://www.economist.com/leaders/2018/08/02/\
+		the-world-is-losing-the-war-against-climate-change?cid1=cust/ednew/n/bl/n/2018/08/2n/owned/n/n/nwl/n/n/ap/140375/n";
+		function Extract_Economist() {
+			$("#content").html("");
+            // $("#url_input").attr("placeholder","https://www.economist.com/leaders/2018/08/02/the-world-is-losing-the-war-against-climate-change?cid1=cust/ednew/n/bl/n/2018/08/2n/owned/n/n/nwl/n/n/ap/140375/n");
+			// $("#url_input").val(proxy_url+test_url);
+			var url = $("#url_input").val();
+			$.ajax({
+				url: proxy_url+url,
+				type: "GET",
+				// beforeSend: function(request) {
+				// 	// request.setRequestHeader("Authority", "www.economist.com");
+				// 	// request.setRequestHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36");
+                //     // request.setRequestHeader("cookie","")
+                //     // request.setRequestHeader("Origin","https://www.economist.com");
+				// },
+				dataType: "html",
+				success: function(data){
+					// change string into DOM
+					raw_html = $.parseHTML(data);
+					[flytitle, title, text] = parse(raw_html);
+					$("#content").append("<h2>"+flytitle+"<\h2>");
+					$("#content").append("<h1>"+title+"<\h1>");
+					$("#content").append(text);
+				},
+				error: function(){
+					$("#content").append("<p>Extraction unsuccessful</p>");
+				}
+			})
+		}
+
+		function parse(html){
+			// // another way to create dummy DOM:
+			// dummy = $('<div></div>');
+			// dummy.html(html)
+			var flytitle = $(".flytitle-and-title__flytitle",html).eq(0).text();
+			var title = $(".flytitle-and-title__title",html).eq(0).text();
+			var text = $(".blog-post__text>p,.blog-post__text>h2",html);
+			console.log(flytitle,title);
+			return [flytitle, title, text];
+		}
+	</script>
+</head>
+<body>
+	请输入要提取的文章链接：
+	<br/>
+	<input type="text" name="economist_url" id="url_input" style="width:1000px" /><br>
+	<button onclick="Extract_Economist()">提取文章</button><br>
+	<div id="content"></div>
+</body>
+</html>
