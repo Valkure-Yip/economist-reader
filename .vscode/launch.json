@@ -5,6 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch proxy",
+            "program": "${workspaceFolder}/proxy.js"
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
@@ -15,7 +21,7 @@
             "name": "Launch index.html",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceFolder}/economist.html"
+            "file": "${workspaceFolder}/index.html"
         },
     ]
 }
